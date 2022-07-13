@@ -44,6 +44,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import gov.dhs.cisa.flare.misp.FileTextReader;
+
 /**
  * This controller pulls events from a FLARE/taxii server and pushes them out to
  * a MISP server
@@ -123,22 +125,25 @@ public class MispTransClientController {
 
             taxii11Response.processPollResponse(stixPackages, processType);
             return new MispTransClient(counter.incrementAndGet(), String.valueOf(response.getStatusCode()), null,
-                processType, collectionName, dateStart.toString(), dateStop.toString());
+                    processType, collectionName, dateStart.toString(), dateStop.toString());
         } catch (Exception e) {
             log.info(">>>>>>>>>>>>> Connection Timeout error occurred : {} ", url);
             log.info(">>>>>>>>>>>>> Please check the URL, Collection Name, and Authorization");
         }
-        //log.info("Read XML Data");
+        log.info("Collecting XML Data");
         /*
-         *         Create Method/Class Returning Data from XML
+         * Create Method/Class Returning Data from XML
          */
+        
         return null;
     }
 
     @PostMapping("/misptransclient")
     public MispTransClient event(@RequestParam(value = "processType", defaultValue = "xmlOutput") String processType,
-                                 @RequestParam(value = "collection", defaultValue = "") String collection)
-        throws ParserConfigurationException, TransformerException, SAXException, IOException, URISyntaxException, UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException, KeyManagementException {
+            @RequestParam(value = "collection", defaultValue = "") String collection)
+            throws ParserConfigurationException, TransformerException, SAXException, IOException, URISyntaxException,
+            UnrecoverableKeyException, CertificateException, NoSuchAlgorithmException, KeyStoreException,
+            KeyManagementException {
 
         log.info("MispTransClientController:misptransclient:processType:{} collection: {}", processType, collection);
 
@@ -169,7 +174,7 @@ public class MispTransClientController {
             uri = new URI(url);
         } catch (URISyntaxException e) {
             log.error("\n\nERROR: Config value for {} URL {} is a malformed URL. {}\n\n", configPropertyKey, url,
-                e.getMessage());
+                    e.getMessage());
             return new HealthCheckResponse(resourceType, url, 408);
         }
         ResponseEntity<String> response;
@@ -186,13 +191,13 @@ public class MispTransClientController {
             String resolution = "";
             if (e.getCause().getMessage().contains("unable to find valid certification path to requested target")) {
                 resolution = "Suggested resolution: Add " + uri.getHost()
-                    + "'s Intermediate-CA public certificate to the java trust store.\n"
-                    + "For example: sudo keytool -importcert -keystore /usr/local/java/jdk/jre/lib/security/cacerts -file /home/user/ca.crt -alias \"flare-ca\"\n"
-                    + "\n";
+                        + "'s Intermediate-CA public certificate to the java trust store.\n"
+                        + "For example: sudo keytool -importcert -keystore /usr/local/java/jdk/jre/lib/security/cacerts -file /home/user/ca.crt -alias \"flare-ca\"\n"
+                        + "\n";
             }
 
             log.error("\n\nERROR: Health check connection test for " + resourceType + " with " + configPropertyKey + "="
-                + url + " was unsuccessful due to: \n" + e.getCause() + "\n\n" + resolution);
+                    + url + " was unsuccessful due to: \n" + e.getCause() + "\n\n" + resolution);
 
             return new HealthCheckResponse(resourceType, url, 0);
         }
@@ -221,7 +226,7 @@ public class MispTransClientController {
         log.info("Controller refreshConfig Step 3of5 - Attempt to reload Configuration Properties...");
         map.put("Step 3 of 5", "Attempt to reload Configuration Properties...");
         log.info(
-            "Controller refreshConfig Step 4of5 - Reset Begin/End TimeStamps. Will be initialized via Configuration Properties...");
+                "Controller refreshConfig Step 4of5 - Reset Begin/End TimeStamps. Will be initialized via Configuration Properties...");
         map.put("Step 4 of 5", "Reset Begin/End TimeStamps. Will be initialized via Configuration Properties...");
         Config.loadConfig();
 
@@ -248,16 +253,17 @@ public class MispTransClientController {
 
         try {
             JobDetail job1 = JobBuilder.newJob(InitializeQuartzJob.class).withIdentity("initializeQuartzJob", "group1")
-                .build();
+                    .build();
 
             Trigger trigger1 = TriggerBuilder.newTrigger().withIdentity("simpleTrigger", "group1")
-                .withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(quartzFrequency)).build();
+                    .withSchedule(SimpleScheduleBuilder.repeatMinutelyForever(quartzFrequency)).build();
 
             Scheduler scheduler1 = new StdSchedulerFactory().getScheduler();
             if (!scheduler1.isStarted()) {
-                sbf.append("Quartz Scheduler has not been started automatically. Or has previously stopped. Starting it now.");
+                sbf.append(
+                        "Quartz Scheduler has not been started automatically. Or has previously stopped. Starting it now.");
                 log.info(
-                    "Controller- Quartz Scheduler has not been started automatically. Or has previously stopped. Starting it now.");
+                        "Controller- Quartz Scheduler has not been started automatically. Or has previously stopped. Starting it now.");
                 scheduler1.start();
                 scheduler1.scheduleJob(job1, trigger1);
             } else {
@@ -295,7 +301,7 @@ public class MispTransClientController {
                     log.info("[jobName] : " + jobName + " [groupName] : " + jobGroup + " - " + nextFireTime);
 
                     quartzJobsString.append("jobName: ").append(jobName).append("\ngroupName: ").append(jobGroup)
-                        .append(" - ").append(nextFireTime).append("\n");
+                            .append(" - ").append(nextFireTime).append("\n");
 
                 }
             }
@@ -342,7 +348,6 @@ public class MispTransClientController {
             log.error("Exception when trying to Stop the Quartz Scheduler. " + e.getMessage());
         }
     }
-
 
     private boolean checkResources() {
         boolean resourcesAvailable = true;
