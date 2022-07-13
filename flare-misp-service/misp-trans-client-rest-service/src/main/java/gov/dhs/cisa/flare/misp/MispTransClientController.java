@@ -1,5 +1,7 @@
 package gov.dhs.cisa.flare.misp;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.net.URI;
@@ -44,6 +46,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+//Import -- Rishi
 import gov.dhs.cisa.flare.misp.FileTextReader;
 
 /**
@@ -91,7 +94,8 @@ public class MispTransClientController {
         return contentBlocks;
     }
 
-    public MispTransClient processMispTransClient(String processType, String collectionName) {
+    //Throws Exception -- Rishi
+    public MispTransClient processMispTransClient(String processType, String collectionName) throws FileNotFoundException {
         String url = Config.getProperty("stixtransclient.poll.baseurl");
 
         try {
@@ -130,11 +134,10 @@ public class MispTransClientController {
             log.info(">>>>>>>>>>>>> Connection Timeout error occurred : {} ", url);
             log.info(">>>>>>>>>>>>> Please check the URL, Collection Name, and Authorization");
         }
-        log.info("Collecting XML Data");
-        /*
-         * Create Method/Class Returning Data from XML
-         */
         
+        //Code Block -- Rishi
+        log.info("Collecting XML Data");
+        FileTextReader.readFile(log);
         return null;
     }
 
