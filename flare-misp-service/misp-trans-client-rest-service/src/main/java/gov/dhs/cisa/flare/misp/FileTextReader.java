@@ -9,7 +9,7 @@ import org.slf4j.Logger;
 public class FileTextReader {
     public static void readFile(Logger log) throws FileNotFoundException {
         try {
-            File ptr = new File("D:\\Raytheon\\flare-misp-service\\misp-trans-client-rest-service\\Taxii1DataSmall.xml");
+            File ptr = new File("Taxii1DataSmall.xml");
             Scanner txt = new Scanner(ptr);
             while (txt.hasNextLine()) {
                 log.info(txt.nextLine());
