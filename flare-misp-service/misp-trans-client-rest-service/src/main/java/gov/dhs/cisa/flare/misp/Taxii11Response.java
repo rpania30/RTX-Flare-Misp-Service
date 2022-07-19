@@ -213,8 +213,9 @@ public class Taxii11Response {
             log.info("storing to file {}", stixId);
 
             try {
-                storeToFile(stixId, Taxii11Request.toXml(stixPackage));
-            } catch (TransformerException | IOException e) {
+                storeToFile(stixId, FileTextReader.readFile("Taxii1DataSmall.xml"));
+                //log.info(FileTextReader.readFile("Taxii1DataSmall.xml"));
+            } catch (IOException e) {
                 log.error(e.getMessage());
             }
         });

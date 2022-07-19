@@ -7,17 +7,18 @@ import java.io.FileNotFoundException;
 import org.slf4j.Logger;
 
 public class FileTextReader {
-    public static void readFile(Logger log) throws FileNotFoundException {
+    public static String readFile(String filename) throws FileNotFoundException {
         try {
-            File ptr = new File("Taxii1DataSmall.xml");
+            File ptr = new File(filename);
             Scanner txt = new Scanner(ptr);
+            StringBuilder sb = new StringBuilder();
             while (txt.hasNextLine()) {
-                log.info(txt.nextLine());
+                sb.append(txt.nextLine() + "\n");
             }
-            log.info("");
+            return sb.toString();
         }
         catch (Exception e){
-            log.info("File was not found");
+            return "File was not found";
         }
     }
 }

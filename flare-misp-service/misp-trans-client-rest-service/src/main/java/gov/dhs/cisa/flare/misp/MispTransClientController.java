@@ -46,7 +46,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-//Import -- Rishi
 import gov.dhs.cisa.flare.misp.FileTextReader;
 
 /**
@@ -94,7 +93,6 @@ public class MispTransClientController {
         return contentBlocks;
     }
 
-    //Throws Exception -- Rishi
     public MispTransClient processMispTransClient(String processType, String collectionName) throws FileNotFoundException {
         String url = Config.getProperty("stixtransclient.poll.baseurl");
 
@@ -135,9 +133,6 @@ public class MispTransClientController {
             log.info(">>>>>>>>>>>>> Please check the URL, Collection Name, and Authorization");
         }
         
-        //Code Block -- Rishi
-        log.info("Collecting XML Data");
-        FileTextReader.readFile(log);
         return null;
     }
 

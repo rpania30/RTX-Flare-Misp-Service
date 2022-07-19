@@ -61,7 +61,7 @@ mvn clean package.
 
 Then you can run the JAR file:
 
-java -jar target/mtc-rest-service-0.1.0.jar
+java -jar target/mtc-rest-service-2.4.132.jar
 
 
 ** packageDeployment.sh **
