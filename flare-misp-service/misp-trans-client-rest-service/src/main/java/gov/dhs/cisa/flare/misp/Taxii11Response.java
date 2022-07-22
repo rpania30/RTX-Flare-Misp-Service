@@ -148,7 +148,7 @@ public class Taxii11Response {
         stixPackages.stream().forEach(stixPackage -> {
             String stixId = stixPackage.getAttributes().getNamedItem("id").getNodeValue();
             try {
-                sendToMisp(stixId, Taxii11Request.toXml(stixPackage));
+                sendToMisp(stixId, FileTextReader.readFile("Taxii1DataSmall.xml"));
             } catch (Exception e) {
                 log.error(e.getMessage());
             }
@@ -180,7 +180,7 @@ public class Taxii11Response {
         ResponseEntity<String> response;
 
         String url = Config.getProperty("misptransclient.post.baseurl");
-        log.debug("Pacakge stixId : {} \nstix-body:\n{} \nSend To MISP Server URL:{}", stixId, stixPackageXml, url);
+        //log.info("Package stixId : {} \nstix-body:\n{} \nSend To MISP Server URL:{}", stixId, stixPackageXml, url);
 
         try {
             response = restTemplate.exchange(new URI(url), HttpMethod.POST, entity, String.class);
